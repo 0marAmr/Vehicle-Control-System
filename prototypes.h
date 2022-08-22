@@ -7,6 +7,7 @@
 
 #ifndef PROTOTYPES_H_
 #define PROTOTYPES_H_
+#define WITH_ENGINE_TEMP_CONTROLLER 0
 
 struct vehicle_state{
 	float vehicle_speed, room_temp,engine_temp;
@@ -14,7 +15,11 @@ struct vehicle_state{
 };
 typedef struct vehicle_state vehicleState;
 
-void print_status();
+enum control_values{
+	OFF,ON
+};
+
+void print_status(vehicleState* v_state);
 void speed_protocol_30(struct vehicle_state* v_state);
 void set_engine_temp(struct vehicle_state* v_state);
 void set_traffic_light(float *speed);

@@ -13,7 +13,7 @@
 
 
 int main(void){
-	vehicleState VS = {0.0,18.0,60.0,0,0,0}; //initial sensors readings
+	vehicleState VS = {0.0,18.0,60.0,OFF,OFF,OFF}; //initial sensors readings & states
 	while(1){
 		main_menu(&VS.engine_state);
 		sensors_set_menu(&VS);
@@ -36,7 +36,7 @@ void main_menu(char* eng_state){
 		case 'a':
 		case 'A':
 			printf("\nTurn ON the vehicle engine\n\n");
-			*eng_state=1;
+			*eng_state=ON;
 			return;
 		case 'b':
 		case 'B':
@@ -59,7 +59,9 @@ void sensors_set_menu(vehicleState* v_state){
 		printf("a. Turn off the engine\n");
 		printf("b. Set the traffic light color\n");
 		printf("c. Set the room temperature\n");
+#if WITH_ENGINE_TEMP_CONTROLLER
 		printf("d. Set the engine temperature\n");
+#endif
 		fflush(stdout);
 		scanf(" %c",&choice);
 
@@ -75,9 +77,11 @@ void sensors_set_menu(vehicleState* v_state){
 		case 'C':
 			set_room_temp(v_state);					  //Set the room temperature
 			break;
+#if WITH_ENGINE_TEMP_CONTROLLER
 		case 'd':
 		case 'D':
 			set_engine_temp(v_state); 				 //Set the engine temperature
+#endif
 			break;
 		default:
 			printf("Error, please choose a valid option!\n\n");
@@ -132,31 +136,35 @@ void set_room_temp(vehicleState* v_state){
 	}
 }
 
+#if WITH_ENGINE_TEMP_CONTROLLER
 void set_engine_temp(vehicleState* v_state){
 	float engine_temperature;
 
-	printf("Enter room temperature value: ");
+	printf("Enter engine temperature value: ");
 	fflush(stdout);
 	scanf(" %f",&engine_temperature);
 
 	if(engine_temperature<100 || engine_temperature>150){
-		v_state->ETC_state=1;
+		v_state->ETC_state=ON;
 		v_state->engine_temp=125;
 	}
 	else{
-		v_state->ETC_state=0;
+		v_state->ETC_state=OFF;
 		v_state->engine_temp=engine_temperature;
 	}
 }
-
+#endif
 void speed_protocol_30(vehicleState* v_state){
 	if(!v_state->AC_state){
-		v_state->AC_state=1;
-		v_state->room_temp = v_state->room_temp*(5/4)+1;}
+		v_state->AC_state=ON;
+		v_state->room_temp = v_state->room_temp*(5.0/4)+1;}
+
+#if WITH_ENGINE_TEMP_CONTROLLER
 	if(!v_state->ETC_state){
-		v_state->ETC_state=1;
-		v_state->engine_temp = v_state->engine_temp*(5/4)+1;
+		v_state->ETC_state=ON;
+		v_state->engine_temp = v_state->engine_temp*(5.0/4)+1;
 	}
+#endif
 }
 
 void print_status(vehicleState* v_state){
@@ -169,8 +177,10 @@ void print_status(vehicleState* v_state){
 	printf("Vehicle Speed: %.2f Km/Hr\n",v_state->vehicle_speed);
 	printf("Room Temperature: %.2f\n",v_state->room_temp);
 
+#if WITH_ENGINE_TEMP_CONTROLLER
 	printf("Engine Temperature Controller is ");
 	v_state->ETC_state?printf("ON\n"):printf("OFF\n");
+#endif
 
 	printf("Engine Temperature: %.2f C\n\n",v_state->engine_temp);
 }
