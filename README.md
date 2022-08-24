@@ -29,7 +29,7 @@
 &emsp;&emsp;iii. If temperature is otherwise, Turn “Engine Temperature Controller” OFF<br>
 **d. If vehicle speed is 30 km/hr<br>**
 &emsp;&emsp;i. Turn ON AC if it was OFF and set room temperature to: current temperature * (5/4) + 1<br>
-&emsp;&emsp;ii. Turn ON “Engine Temperature Controller” if it was OFF and set engine temperature to: current temperature * (5/4) + 1
+&emsp;&emsp;ii. Turn ON “Engine Temperature Controller” if it was OFF and set engine temperature to: current temperature * (5/4) + 1<br>
 **e. Display the current vehicle state after applying 7.a to 7.d<br>**
 &emsp;&emsp;i. Engine state: ON/OFF.<br>
 &emsp;&emsp;ii. AC: ON/OFF.<br>
