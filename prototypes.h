@@ -7,7 +7,7 @@
 
 #ifndef PROTOTYPES_H_
 #define PROTOTYPES_H_
-#define WITH_ENGINE_TEMP_CONTROLLER 0
+#define WITH_ENGINE_TEMP_CONTROLLER 1
 
 struct vehicle_state{
 	float vehicle_speed, room_temp,engine_temp;
